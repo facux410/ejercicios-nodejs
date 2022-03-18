@@ -1,21 +1,26 @@
-// console.log(Object.keys(process))
-// console.log(Object.keys(process));
-const index = require('./commands/index')
-// Output un prompt
-process.stdout.write('prompt > ');
+const commands = require("./commands/index.js");
+//Output un prompt
+process.stdout.write("prompt > ");
 // El evento stdin 'data' se dispara cuando el user escribe una línea
-process.stdin.on('data', function (data) {
-  var cmd = data.toString().trim(); // remueve la nueva línea
-  if(cmd ==='date'){
-     index[cmd]();
+process.stdin.on("data", (data) => {
+  const command = data.toString().split(" ")[0];
+  const cmd =
+    command === "echo"
+      ? "echo"
+      : command === "curl"
+      ? "curl"
+      : data.toString().trim(); // remueve la nueva línea
+  const param = data.toString().slice(5);
 
+  switch (cmd) {
+    case "date":
+    case "pwd":
+    case "ls":
+    case "echo":
+    case "curl":
+      commands[cmd](param);
+      break;
+    default:
+      break;
   }
-  if(cmd ==='pwd'){
-      index.pwd()
-  }
-
-  if(cmd === 'ls'){
-      index.ls()
-  }
-  process.stdout.write('\nprompt > ');
 });

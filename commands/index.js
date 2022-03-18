@@ -1,21 +1,45 @@
-const fs =require('fs')
+const fs = require("fs");
+const request = require("request");
 
-const ls = () => {
-    fs.readdir('.' , function (err ,files) {
-        if(err) throw err;
+const done = (output) => {
+  process.stdout.write(output);
+  process.stdout.write("prompt > ");
+};
+const pwd = (file) => {
+  done(process.cwd());
+};
 
-        files.forEach(function(file){
-            process.stdout.write(file.toString() + "\n")
-        })
-        process.stdout.write("prompt > ")
-    })
-}
+const date = () => {
+  done(Date());
+};
+
+const ls = (file) => {
+  fs.readdir(".", (err, files) => {
+    if (err) throw err;
+    let res = "";
+    files.forEach((file) => {
+      res = res + file.toString() + "\n";
+    });
+    done(res);
+  });
+};
+const echo = (arg) => {
+  done(arg);
+};
+
+const curl = (file) => {
+  request(file, (err, response, body) => {
+    done(body);
+  });
+};
 
 module.exports = {
-pwd : function(){process.stdout.write(process.cwd()) },
-date: function(){process.stdout.write(Date())},
-ls
-}
+  pwd,
+  date,
+  ls,
+  echo,
+  curl,
+};
 
 
 // en module exports es mejor declarar las funciones 
